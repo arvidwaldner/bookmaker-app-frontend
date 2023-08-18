@@ -4,7 +4,6 @@ import 'animate.css';
 import "animate.css/animate.min.css";
 import MainComponent from './components/football/Main';
 
-
 function App() {
   return (
     <div className="App">
@@ -13,8 +12,9 @@ function App() {
         <p>
           Bookmaker app - Under construction...
         </p>
-        <MainComponent />        
-      </header>           
+        <MainComponent />                 
+      </header>
+               
     </div>    
   );
 }

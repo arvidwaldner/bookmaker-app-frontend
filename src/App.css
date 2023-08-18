@@ -24,6 +24,24 @@
   color: white;
 }
 
+.Flag-image-loading-spinner-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.Flag-image-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
 .App-link {
   color: #61dafb;
 }
@@ -36,3 +54,5 @@
     transform: rotate(360deg);
   }
 }
+
+
