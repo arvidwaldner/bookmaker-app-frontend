@@ -11,9 +11,9 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Bookmaker app - Under construction...
-        </p>
-        <MainComponent />                 
+        </p>                          
       </header>
+      <MainComponent /> 
                
     </div>    
   );

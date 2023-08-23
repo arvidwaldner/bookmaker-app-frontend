@@ -17,7 +17,7 @@ const GetAvailableLeaguesFromService = async function(countryName){
                 name: item.league.name,
                 type: item.league.type,  
                 logo: item.league.logo,
-                value: item.league.id + "|" + item.league.name});
+                value: item.league.id + "|" + item.league.name});                
             });
         })
         .catch(function(error){

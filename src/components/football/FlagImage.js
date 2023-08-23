@@ -1,8 +1,9 @@
-import React from "react";
+import { React, useEffect, useState, ReactDOM, } from "react";
 import {Container, Table, Image, Row, Col, Figure, Placeholder, Card, Spinner } from "react-bootstrap";
 
 const FlagImageComponent = ({countryFlag, countryName}) => {
 
+    
     return(
         <>
             <Figure>

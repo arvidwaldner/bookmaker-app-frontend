@@ -11,8 +11,8 @@ function MainComponent(){
 
         <>
             <Container>
-                <StatisticsComponent />             
-                 
+                <StatisticsComponent />          
+
             </Container>
             
         </>

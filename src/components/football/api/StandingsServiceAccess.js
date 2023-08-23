@@ -15,7 +15,7 @@ const GetStandingsFromService = async function(leagueId){
             const standingsResponse = response.data.response[0].league.standings[0];
             standingsResponse.forEach((item) => {
                 tableStandings.push({
-                    id: item.team.id,
+                    id: item.team.id + "_" + item.team.name,
                     rank: item.rank,
                     teamLogo: item.team.logo,
                     teamName: item.team.name,

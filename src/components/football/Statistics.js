@@ -1,9 +1,9 @@
 import { React, useEffect, useState, ReactDOM, } from "react";
 import {Container, Table, Image, Row, Col, Figure, Placeholder, Card, Spinner } from "react-bootstrap";
 import LoadingIconComponent from "../helpers/LoadingIcon";
-import axios from "axios";
 import 'animate.css';
-import Select from 'react-select';
+import "animate.css/animate.min.css";
+import { AnimationOnScroll } from 'react-animation-on-scroll';
 import StandingsComponent from "./Standings";
 import LeaguesComponent from "./Leagues";
 import CountriesComponent from "./Countries";
@@ -11,6 +11,7 @@ import FlagImageComponent from "./FlagImage";
 import GetAvailableCountriesFromService from "./api/AvalailableCountriesServiceAccess";
 import GetAvailableLeaguesFromService from "./api/AvailableLeaguesServiceAccess";
 import GetStandingsFromService from "./api/StandingsServiceAccess";
+import StatisticsHeaderComponent from "./StatisticsHeader";
 
 
 
@@ -25,6 +26,7 @@ function StatisticsComponent(){
     let [currentStandings, setCurrentStandings] = useState([]);
     let [leagueSelected, setLeagueSelected] = useState(false);
     let [leagueId, setLeagueId] = useState("0");
+    let [selectedLeagueName, setSelectedLeagueName] = useState("");
     let [imageIsLoading, setImageIsLoading] = useState(true);
 
     let handleCountryChange = (e) => {
@@ -54,11 +56,15 @@ function StatisticsComponent(){
 
     let handleLeagueChange = (e) => {
         
-        const valueSelected = e.target.value;        
+        const valueSelected = e.target.value.split('|');
+        const selectedLeagueName = e.target.options[e.target.selectedIndex].text;
+        const selectedLeagueId = valueSelected[0];
+                      
         setIsLoading(true);
-        setLeagueId(valueSelected);        
+        setLeagueId(selectedLeagueId);
+        setSelectedLeagueName(selectedLeagueName);        
         setLeagueSelected(true);
-        getLeagueStandings(valueSelected);
+        getLeagueStandings(selectedLeagueId);
         setIsLoading(false);
     };
 
@@ -73,9 +79,8 @@ function StatisticsComponent(){
         const leagues = await GetAvailableLeaguesFromService(countryName);     
            
         // Update the options state
-        setAvailableLeagues([{name: '⬇️ Select a league ⬇️', code: '', logo: '', id: 0, type: ''}, ...leagues]);     
-        
-        
+        setAvailableLeagues([{name: '⬇️ Select a league ⬇️', code: '', logo: '', id: 0, type: ''}, ...leagues]);
+               
     }
 
     async function getLeagueStandings(leagueId){
@@ -85,31 +90,65 @@ function StatisticsComponent(){
         //Update the current standings of selected league
         setCurrentStandings([...tableStandings]);
     }
+    
+    const renderHeaderComponent = (
 
-     
+        <AnimationOnScroll animateIn='animate__slideInDown' animatePreScroll={true} duration={1}> 
+            <StatisticsHeaderComponent />
+        </AnimationOnScroll>
+    );
+
+    const renderCountriesComponent = (
+        <AnimationOnScroll animateIn='animate__zoomIn' animatePreScroll={true} duration={1}>
+            <CountriesComponent 
+                isLoading={isLoading} 
+                countrySelected={countrySelected} 
+                availableCountries={availableCountries} 
+                handleCountryChange={handleCountryChange} 
+                countryFlag={countryFlag} 
+                countryName={countryName}>
+            </CountriesComponent>
+        </AnimationOnScroll>
+    );
+
+    const renderLeaguesComponent = (
+        <AnimationOnScroll animateIn='animate__fadeInLeft' animatePreScroll={true} duration={1}>
+            <LeaguesComponent availableLeagues={availableLeagues} handleLeagueChange={handleLeagueChange} />                                             
+        </AnimationOnScroll>
+    );
+
+    const renderStandingsComponent = (
+        <AnimationOnScroll animateIn="animate__zoomIn">
+            <StandingsComponent currentStandings={currentStandings} selectedLeague={selectedLeagueName} />   
+        </AnimationOnScroll>        
+    );
 
     return(
         <>
             <Container>
-                <h3>Football Statistics - Check current league standings in different countries</h3>
+                {renderHeaderComponent}                  
+                <br />
+                <Container>
+                    <Row>
+                        <Col>
+                            {renderCountriesComponent}                                                  
+                        </Col>                        
+                    </Row>
+                    <Row>
+                        <Col>
+                            {countrySelected ? (renderLeaguesComponent) : (<p></p>)}                        
+                                
+                               
+                                                       
+                        </Col>                                                                   
+                    </Row>
+                    <br />                                                                                                        
+                </Container>
+                <br />
             </Container>
             <Container>
-                <Row>
-                    <Col sm={4}>
-                        {countrySelected ? (<FlagImageComponent countryFlag={countryFlag} countryName={countryName} />) : (<p>1. ⬇️ Select a country ⬇️</p>)}
-                    </Col>                    
-                </Row>
-                <Row>
-                    <Col sm={6}>
-                        {isLoading ? (<LoadingIconComponent type={"cubes"} color={"#fff"} />) : (<CountriesComponent availableCountries={availableCountries} handleCountryChange={handleCountryChange} />)}                        
-                    </Col>
-                    <Col sm={6}>
-                        {countrySelected ? (<LeaguesComponent availableLeagues={availableLeagues} handleLeagueChange={handleLeagueChange} />) : (<Placeholder sm={6} size="sm" />)}    
-                    </Col>                
-                </Row>                                                                
-            </Container>
-            <Container>
-                {leagueSelected ? (<StandingsComponent currentStandings={currentStandings} />) : (<Placeholder sm={6} size="sm" />)}
+                {leagueSelected ? (renderStandingsComponent) : (<p></p>)}
+                <br />
             </Container>
         </>
     );
